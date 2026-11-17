@@ -32,8 +32,7 @@ pipeline {
                 sh ''' 
                     set -eu 
                     mkdir -p reports 
-                    .venv/bin/python -m pytest -q \\ 
-                        --junitxml=reports/junit.xml 
+                    .venv/bin/python -m pytest -q --junitxml=reports/junit.xml 
                 ''' 
             } 
             post { 
