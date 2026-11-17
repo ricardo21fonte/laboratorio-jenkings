@@ -46,6 +46,35 @@ pipeline {
                 } 
             } 
         } 
+
+        stage('Docker Preflight') {
+            steps {
+                sh '''
+                    set -eu
+                    command -v docker
+                    docker info --format '{{.ServerVersion}}'
+                    test -f Dockerfile
+                '''
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                sh '''
+                    set -eu
+                    docker build -t "jenkins-demo-api:$BUILD_NUMBER" .
+                '''
+            }
+        }
+
+        stage('Verify Image') {
+            steps {
+                sh '''
+                    set -eu
+                    docker image inspect --format '{{.Id}}' "jenkins-demo-api:$BUILD_NUMBER"
+                '''
+            }
+        }
     } 
  
     post { 
